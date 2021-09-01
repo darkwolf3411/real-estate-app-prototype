@@ -1,12 +1,9 @@
-import Head from 'next/head'
 import Link from 'next/link'
+import MainWrapper from '../components/UI/MainWrapper'
 
 export default function Home() {
   return (
-    <div>
-      <Head>
-        <title>Real Estate App</title>
-      </Head>
+    <MainWrapper keywords={'main page'} title={'Real Estate App'}>
       <section>
         <h2>Real Estate App</h2>
         <p>
@@ -15,7 +12,7 @@ export default function Home() {
       </section>
       <section>
       </section>
-    </div>
+    </MainWrapper>
   )
 }
 
