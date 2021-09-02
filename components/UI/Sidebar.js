@@ -12,25 +12,15 @@ position: fixed;
 `
 
 const Sidebar = () => {
-  const [value, setValue] = useState(500000);
-  const {useInfinity, setInfinity,setListings} = useContext(ItemContext);
-  const {setIsFiltred,isFiltred} = useContext(FilterContext);
-  const [fetching, isLoading, error] = useFetching(async()=>{
-    await fetch(`api/setfilter?_filter=${value}&`)
-    .then((res) => res.json())
-    .then((result) => {
-      setListings(result)
-    });
-  })
+  const { useInfinity, setInfinity, setListings } = useContext(ItemContext);
+  const { filter, setFilter } = useContext(FilterContext);
   const handleChange = nextChecked => {
     setInfinity(nextChecked);
   };
-  const agreetHendler =()=>{
-    setIsFiltred(true)
+  const agreetHendler = () => {
     fetching()
   }
-  const resetHendler =()=>{
-    setIsFiltred(false)
+  const resetHendler = () => {
     fetching()
   }
   return (
@@ -41,17 +31,17 @@ const Sidebar = () => {
         type="range"
         min="1"
         max="1000000"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
+        value={filter.maxPrice}
+        onChange={(e) => setFilter({...filter,maxPrice: e.target.value})}
       ></input>
-      {value}$ 
+      {filter.maxPrice}$
       <br />
       <div>
         <span>use infinity</span>
-        <Switch onChange={handleChange}  checked={useInfinity} />
+        <Switch onChange={handleChange} checked={useInfinity} />
       </div>
-      <button onClick={()=>agreetHendler()}>ok</button>
-      <button onClick={()=>resetHendler()}>reset</button>
+      <button onClick={() => agreetHendler()}>ok</button>
+      <button onClick={() => resetHendler()}>reset</button>
     </StyledSidebar>
   );
 };

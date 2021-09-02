@@ -27,7 +27,7 @@ const GlobalStyle = createGlobalStyle`
 
 export default function App({ Component, pageProps }) {
   const [listings, setListings] = useState([]);
-  const [isFiltred, setIsFiltred] = useState(false);
+  const [filter, setFilter] = useState({ maxPrice: 712433, countOfGarage: null, countOfBadroom: null, MaxSquare: 1000000, type: null});
   const [useInfinity, setInfinity] = useState(false);
   return (
     <>
@@ -35,8 +35,8 @@ export default function App({ Component, pageProps }) {
       <ThemeProvider theme={theme}>
         <FilterContext.Provider
           value={{
-            setIsFiltred,
-            isFiltred,
+            setFilter,
+            filter,
           }}
         >
           <ItemContext.Provider

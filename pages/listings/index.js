@@ -9,6 +9,7 @@ import { ItemContext } from "../../context/context";
 import { FilterContext } from "../../context/FilterContext";
 import styled from "styled-components";
 import Pagination from "../../components/UI/Pagination";
+import useItems from "../../hooks/useItems"
 
 const Content = styled.div`
   min-width: 480px;
@@ -19,19 +20,24 @@ const Content = styled.div`
 
 export default function Listings() {
   const { useInfinity, listings, setListings } = useContext(ItemContext);
-  const { isFiltred } = useContext(FilterContext);
-  const [totalPages, setTotalPages] = useState(50);
+  const { filter, setFilter } = useContext(FilterContext);
+  const [totalPages, setTotalPages] = useState(null);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(12);
+  const [limit, setLimit] = useState(6);
   const lastElement = useRef();
 
+  const filtredArray = useItems(listings, limit, page, filter)
+
+  function getPagination() {
+    setTotalPages(Math.ceil(filtredArray.length/limit))
+  }
   const [fetching, isLoading, error] = useFetching(async () => {
-    await fetch(`api/listings?_limit=${limit}&_page=${page}`)
+    await fetch(`api/listings`)
       .then((res) => res.json())
       .then((result) => {
-        if (useInfinity) {
-          return setListings([...listings, ...result]);
-        }
+        // if (useInfinity) {
+        //   return setListings([...listings, ...result]);
+        // }
         return setListings(result);
       });
   });
@@ -53,7 +59,7 @@ export default function Listings() {
     <MainWrapper keywords={"houses sale listing"} title={"Houses for Sale"}>
       <Sidebar />
       <Content>
-        <ItemsList listings={listings} />
+        <ItemsList listings={filtredArray} />
         {useInfinity ? null : (
           <Pagination
             callback={handlePageClick}
