@@ -16,8 +16,8 @@ class mathUtils {
         if (!filter.countOfBadroom) {
             filtredArray = array.filter(item => item.bedrooms == filter.countOfBadroom)
         }
-        if (filter.MaxSquare) {
-            filtredArray = array.filter(item => item.square <= filter.MaxSquare)
+        if (filter.maxSquare) {
+            filtredArray = array.filter(item => item.square <= filter.maxSquare)
         }
         return filtredArray
     }

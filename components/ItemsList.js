@@ -12,21 +12,17 @@ const StyeledGrid = styled(Grid)`
   }
 `;
 
-const ItemsList = ({ listings }) => {
+const ItemsList = ({ listings, mapPoint }) => {
   if (!listings.length) {
     return <h1>Товары не найдены</h1>;
   }
   return (
     <Grid style={{padding: 10}}>
-        <StyeledGrid gap={'0'} columns={'repeat(auto-fit,minmax(350px,1fr))'}>
-          {listings.map((item) => (
-              <ProductItem key={item.id} data={item} />
-          ))}
-        </StyeledGrid>
       <YMaps >
         <Map
-          width={"100%"}
-          height={"350px"}
+          width={"90%"}
+          margin={'0 auto'}
+          height={"280px"}
           defaultState={{
             center: [
               listings[2].address.coordinates.latitude,
@@ -36,7 +32,7 @@ const ItemsList = ({ listings }) => {
           }}
         >
           {" "}
-          {listings.map((item) => {
+          {mapPoint.map((item) => {
             return (
               <Placemark
               key={item.id}
@@ -49,6 +45,11 @@ const ItemsList = ({ listings }) => {
           })}
         </Map>
       </YMaps>
+        <StyeledGrid gap={'0'} columns={'repeat(auto-fit,minmax(350px,1fr))'}>
+          {listings.map((item) => (
+              <ProductItem key={item.id} data={item} />
+          ))}
+        </StyeledGrid>
     </Grid>
   );
 };

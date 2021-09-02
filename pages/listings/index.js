@@ -9,7 +9,7 @@ import { ItemContext } from "../../context/context";
 import { FilterContext } from "../../context/FilterContext";
 import styled from "styled-components";
 import Pagination from "../../components/UI/Pagination";
-import useItems from "../../hooks/useItems"
+import { useItems } from "../../hooks/useItems";
 
 const Content = styled.div`
   min-width: 480px;
@@ -20,17 +20,19 @@ const Content = styled.div`
 
 export default function Listings() {
   const { useInfinity, listings, setListings } = useContext(ItemContext);
-  const { filter, setFilter } = useContext(FilterContext);
-  const [totalPages, setTotalPages] = useState(null);
+  const { filter, setFilter, confirmFilter } = useContext(FilterContext);
+  const [totalPages, setTotalPages] = useState(0);
   const [page, setPage] = useState(1);
-  const [limit, setLimit] = useState(6);
+  const [limit, setLimit] = useState(12);
   const lastElement = useRef();
 
-  const filtredArray = useItems(listings, limit, page, filter)
+  const [filtredArrayCount, filtredAndPaginationArray] = useItems(
+    listings,
+    limit,
+    page,
+    filter
+  );
 
-  function getPagination() {
-    setTotalPages(Math.ceil(filtredArray.length/limit))
-  }
   const [fetching, isLoading, error] = useFetching(async () => {
     await fetch(`api/listings`)
       .then((res) => res.json())
@@ -47,23 +49,25 @@ export default function Listings() {
   };
   useObserver(lastElement, page < totalPages, isLoading, () => {
     if (useInfinity) {
-      alert("ti pidoras");
       setPage(page + 1);
     }
   });
   useEffect(() => {
     fetching();
-  }, [page]);
+  }, [page,confirmFilter]);
 
   return (
     <MainWrapper keywords={"houses sale listing"} title={"Houses for Sale"}>
       <Sidebar />
       <Content>
-        <ItemsList listings={filtredArray} />
+        <ItemsList
+          mapPoint={filtredAndPaginationArray}
+          listings={filtredAndPaginationArray}
+        />
         {useInfinity ? null : (
           <Pagination
             callback={handlePageClick}
-            totalPages={totalPages}
+            totalPages={Math.ceil(filtredArrayCount / limit)}
             limit={limit}
           />
         )}

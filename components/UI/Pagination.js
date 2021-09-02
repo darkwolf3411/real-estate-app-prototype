@@ -37,7 +37,7 @@ const StyeledPagination = styled.div`
   }
 `;
 
-const Pagination = ({callback,totalPages,limit}) => {
+const Pagination = ({callback,totalPages}) => {
   return (
     <StyeledPagination>
       <ReactPaginate
@@ -45,7 +45,7 @@ const Pagination = ({callback,totalPages,limit}) => {
         nextLabel={"next"}
         breakLabel={"..."}
         breakClassName={"break-me"}
-        pageCount={Math.ceil(totalPages / limit)}
+        pageCount={totalPages}
         marginPagesDisplayed={2}
         pageRangeDisplayed={5}
         onPageChange={callback}
